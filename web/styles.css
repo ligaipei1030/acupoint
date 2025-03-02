@@ -428,9 +428,9 @@ footer {
     }
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
     body {
-        overflow-y: auto; /* 允許頁面滾動 */
+        overflow-y: auto;
         background: var(--background-color);
     }
 
@@ -438,7 +438,7 @@ footer {
         width: 100%;
         height: auto;
         margin: 0;
-        padding: 20px;
+        padding: 0;
         border-radius: 0;
         box-shadow: none;
         background: transparent;
@@ -447,15 +447,15 @@ footer {
     .camera-container {
         position: relative;
         width: 100%;
-        aspect-ratio: 16/9; /* 保持 16:9 的比例 */
-        border-radius: 20px;
+        padding-top: 177.78%; /* 16:9 反轉比例 (9:16 = 1.7778 = 177.78%) */
         overflow: hidden;
         background: var(--card-background);
-        box-shadow: var(--shadow-sm);
-        margin-bottom: 20px;
     }
 
     #video {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -474,106 +474,73 @@ footer {
     }
 
     .control-section {
-        position: relative; /* 改為相對定位 */
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
         width: 100%;
-        padding: 20px;
-        background: transparent;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        z-index: 1000;
+    }
+
+    .options-menu {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 80px;
+        transform: none;
+        width: 100%;
+        max-height: 40vh;
+        border-radius: 20px 20px 0 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 999;
+        overflow-y: auto;
     }
 
     .btn-group {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-around;
         gap: 10px;
-        justify-content: center;
+        width: 100%;
+        max-width: 400px;
+        padding: 0 20px;
     }
 
     .btn {
         flex: 1;
-        min-width: 120px;
-        max-width: 200px;
-        padding: 15px;
+        max-width: 150px;
+        height: 45px;
         font-size: 16px;
-        border-radius: 15px;
-        background: var(--card-background);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .options-menu {
-        position: relative; /* 改為相對定位 */
-        width: 100%;
-        max-width: none;
-        margin: 20px 0;
-        padding: 20px;
-        border-radius: 20px;
-        background: var(--card-background);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .symptom-list {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        padding: 0;
-    }
-
-    .symptom-list .option-btn {
-        width: 100%;
-        padding: 15px;
-        font-size: 16px;
-        border-radius: 15px;
-    }
-
-    #meridian-options {
-        grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: var(--primary-color);
+        color: white;
     }
 
     /* 調整提示文字位置 */
+    .acupoint-title,
+    .palm-guide,
+    .timer,
+    .massage-complete {
+        position: fixed;
+        z-index: 1001;
+    }
+
     .acupoint-title {
-        top: 30px;
-        padding: 12px 24px;
-        font-size: 16px;
-        z-index: 1000;
+        top: env(safe-area-inset-top, 40px);
     }
 
     .palm-guide {
-        top: 90px;
-        padding: 12px 24px;
-        font-size: 16px;
-        z-index: 1000;
-    }
-
-    .timer, .massage-complete {
-        top: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 12px 24px;
-        font-size: 16px;
-        z-index: 1000;
-    }
-
-    .symptom-list, #meridian-options {
-        padding: 20px 15px;
-        padding-bottom: calc(15px + env(safe-area-inset-bottom));
-        margin-bottom: 0;
-    }
-
-    .logo {
-        font-size: 2rem;
-        margin-bottom: 10px;
-    }
-    
-    h1 {
-        font-size: 1.5rem;
-    }
-    
-    .subtitle {
-        font-size: 0.9rem;
-    }
-
-    #meridian-options {
-        max-width: 200px;  /* 在小螢幕上減少寬度 */
+        top: calc(env(safe-area-inset-top, 40px) + 60px);
     }
 }
 
@@ -581,11 +548,16 @@ footer {
 @supports (-webkit-touch-callout: none) {
     @media screen and (max-width: 768px) {
         .camera-container {
-            margin-top: env(safe-area-inset-top);
+            padding-top: 177.78%; /* 保持 9:16 比例 */
         }
 
-        .control-section {
-            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+        #video, #output-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     }
 }
